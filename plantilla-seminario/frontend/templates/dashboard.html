@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Biblioteca Universitaria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/dashboard">
+                <i class="bi bi-book-half me-2"></i>
+                Biblioteca Universitaria
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard">
+                            <i class="bi bi-house-door me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/catalogo">
+                            <i class="bi bi-book me-1"></i>Catálogo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/prestamos">
+                            <i class="bi bi-arrow-left-right me-1"></i>Préstamos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reservas">
+                            <i class="bi bi-calendar-check me-1"></i>Reservas
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <div class="me-2 text-end">
+                                <div class="fw-semibold" id="user-name">Usuario</div>
+                                <small class="text-light opacity-75" id="user-role">Rol</small>
+                            </div>
+                            <i class="bi bi-person-circle fs-5"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><span class="dropdown-item-text fw-semibold" id="dropdown-user-name">Usuario</span></li>
+                            <li><span class="dropdown-item-text text-muted small" id="dropdown-user-role">Rol</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container-fluid py-4 mt-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h2 fw-bold text-dark mb-1">Dashboard</h1>
+                        <p class="text-muted mb-0">Resumen general del sistema bibliotecario</p>
+                    </div>
+                    <div class="text-end">
+                        <div class="text-muted small" id="current-time"></div>
+                        <div class="badge bg-success" id="user-welcome">Bienvenido</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-5" id="stats-grid">
+            <!-- Stats will be loaded here -->
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="card-title mb-0 fw-semibold">
+                            <i class="bi bi-lightning me-2 text-warning"></i>Acciones Rápidas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <a href="/catalogo" class="text-decoration-none">
+                                    <div class="action-card card h-100 border-0 shadow-sm-hover cursor-pointer">
+                                        <div class="card-body text-center p-4">
+                                            <div class="action-icon bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                                <i class="bi bi-search text-white fs-4"></i>
+                                            </div>
+                                            <h5 class="fw-semibold mb-2">Buscar Libros</h5>
+                                            <p class="text-muted small mb-0">Explora nuestro catálogo completo</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/prestamos" class="text-decoration-none">
+                                    <div class="action-card card h-100 border-0 shadow-sm-hover cursor-pointer">
+                                        <div class="card-body text-center p-4">
+                                            <div class="action-icon bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                                <i class="bi bi-arrow-left-right text-white fs-4"></i>
+                                            </div>
+                                            <h5 class="fw-semibold mb-2">Mis Préstamos</h5>
+                                            <p class="text-muted small mb-0">Gestiona tus préstamos activos</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/reservas" class="text-decoration-none">
+                                    <div class="action-card card h-100 border-0 shadow-sm-hover cursor-pointer">
+                                        <div class="card-body text-center p-4">
+                                            <div class="action-icon bg-warning bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                                <i class="bi bi-calendar-check text-white fs-4"></i>
+                                            </div>
+                                            <h5 class="fw-semibold mb-2">Mis Reservas</h5>
+                                            <p class="text-muted small mb-0">Revisa y gestiona tus reservas</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner-container text-center">
+            <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="text-white fw-semibold fs-5">Cargando...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

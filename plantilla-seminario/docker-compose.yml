@@ -1,0 +1,55 @@
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - microservicio-autenticacion
+      - microservicio-catalogo
+      - microservicio-prestamos
+      - microservicio-reservas
+    networks:
+      - biblioteca-network
+
+  microservicio-autenticacion:
+    build: ./microservicio-autenticacion
+    ports:
+      - "8001:8001"  # Interno:8001, Externo:8001
+    networks:
+      - biblioteca-network
+
+  microservicio-catalogo:
+    build: ./microservicio-catalogo
+    ports:
+      - "8002:8001"  # Interno:8001, Externo:8002  
+    networks:
+      - biblioteca-network
+
+  microservicio-prestamos:
+    build: ./microservicio-prestamos
+    ports:
+      - "8003:8003"  # Interno:8003, Externo:8003
+    networks:
+      - biblioteca-network
+
+  microservicio-reservas:
+    build: ./microservicio-reservas
+    ports:
+      - "8004:8004"  # Interno:8004, Externo:8004
+    networks:
+      - biblioteca-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5000:5000"
+    environment:
+      - API_BASE=http://api-gateway:8000
+    depends_on:
+      - api-gateway
+    networks:
+      - biblioteca-network
+
+networks:
+  biblioteca-network:
+    driver: bridge
